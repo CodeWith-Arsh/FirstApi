@@ -1,51 +1,75 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using FirstApi;  // Add this line to reference the UserClass
+﻿using FirstApi;
+using Microsoft.AspNetCore.Mvc;
 
-public class UserController : ControllerBase
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+
+namespace first_API.Controllers
 {
-    private static List<User> users = new List<User>();
-    // GET: api/<UserController>
-    [HttpGet]
-    public IEnumerable<User> Get()
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
     {
-        return users;
-    }
-    // GET api/<UserController>/5
-    [HttpGet("{id}")]
-    public User Get(int id)
-    {
-        var user = users.FirstOrDefault(x => x.Id == id);
-        return user;
-    }
-    // POST api/<UserController>
-    [HttpPost]
-    public void Post([FromBody] User request)
-    {
-        users.Add(request);
-    }
-    // PUT api/<UserController>/5
-    [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] User request)
-    {
-        var user = users.FirstOrDefault(x => x.Id == id);
-        if (user == null)
+
+        private static List<User> users = new List<User>();
+
+
+        // GET: api/<UserController>
+        [HttpGet]
+        //getting all users so is an array
+        public IEnumerable<User> Get()
         {
-            return NotFound();
+            return users;
         }
-        else
+        //get a single user 
+        // GET api/<UserController>/5
+
+        [HttpGet("{id}")]
+        public User Get(int id)
         {
-            //user.Id = id;
-            user.Name = request.Name;
-            user.Email = request.Email;
-            user.Job = request.Job;
-            return Ok(user);
+
+            var user = users.FirstOrDefault(x => x.Id == id);
+            return user;
         }
-    }
-    // DELETE api/<UserController>/5
-    [HttpDelete("{id}")]
-    public void Delete(int id)
-    {
-        var user = users.FirstOrDefault(x => x.Id == id);
-        users.Remove(user);
+
+        // POST api/<UserController>  create a user form body means the data will be in request's body
+        [HttpPost]
+        public void Post([FromBody] User request)
+        {
+            //adding an user
+            users.Add(request);
+        }
+
+        //UDDATING THE USER 
+        // PUT api/<UserController>/5
+        [HttpPut("{id}")]
+        public IActionResult Put(int id, [FromBody] User request)
+        {
+            var user = users.FirstOrDefault(x => x.Id == id);
+            if (user == null)
+            {
+                return
+                    BadRequest();
+            }
+            else
+            {
+
+                //user.Id = id;
+                user.Email = request.Email;
+                user.Name = request.Name;
+                return Ok(user);
+
+            }
+            //var user = users[id];
+
+        }
+
+        // DELETE api/<UserController>/5
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
+            // var user = users.FirstOrDefault(x => x.Id == id);
+            // users.Remove(user);
+            users.Remove(Get(id));
+        }
     }
 }
