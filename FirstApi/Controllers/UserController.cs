@@ -9,37 +9,32 @@ namespace first_API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-
         private static List<User> users = new List<User>();
-
-
+       
         // GET: api/<UserController>
         [HttpGet]
-        //getting all users so is an array
         public IEnumerable<User> Get()
         {
             return users;
         }
-        //get a single user 
+        //Returns ALL USERS
         // GET api/<UserController>/5
-
         [HttpGet("{id}")]
+        //Returns a Single User
         public User Get(int id)
         {
-
             var user = users.FirstOrDefault(x => x.Id == id);
             return user;
         }
-
-        // POST api/<UserController>  create a user form body means the data will be in request's body
+        //Inserting users using POST
+        // POST api/<UserController>
         [HttpPost]
         public void Post([FromBody] User request)
         {
-            //adding an user
             users.Add(request);
         }
 
-        //UDDATING THE USER 
+        //Updating user using PUT
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] User request)
@@ -47,29 +42,25 @@ namespace first_API.Controllers
             var user = users.FirstOrDefault(x => x.Id == id);
             if (user == null)
             {
-                return
-                    BadRequest();
+                return NotFound();
             }
             else
             {
-
                 //user.Id = id;
-                user.Email = request.Email;
                 user.Name = request.Name;
+                user.Email = request.Email;
+                user.Job = request.Job;
                 return Ok(user);
-
             }
-            //var user = users[id];
-
         }
-
+        //Deleting a particular User
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            // var user = users.FirstOrDefault(x => x.Id == id);
-            // users.Remove(user);
-            users.Remove(Get(id));
+            var user = users.FirstOrDefault(x => x.Id == id);
+            users.Remove(user);
         }
     }
 }
+
