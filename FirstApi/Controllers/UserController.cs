@@ -34,7 +34,7 @@ namespace first_API.Controllers
             users.Add(request);
         }
 
-        //Updating user using PUT
+        //Updating user using PUT 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] User request)
@@ -46,7 +46,7 @@ namespace first_API.Controllers
             }
             else
             {
-                //user.Id = id;
+                user.Id = id;
                 user.Name = request.Name;
                 user.Email = request.Email;
                 user.Job = request.Job;
